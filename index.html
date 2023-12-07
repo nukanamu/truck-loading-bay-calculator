@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Truck Loading Bay Capacity Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        form {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        #result {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Truck Loading Bay Capacity Calculator</h1>
+
+    <form id="loadingForm">
+        <label for="numTrucks">Number of Trucks:</label>
+        <input type="number" id="numTrucks" min="1" required>
+
+        <label for="loadingTime">Loading Time per Truck (minutes):</label>
+        <input type="number" id="loadingTime" min="1" required>
+
+        <label for="loadingRate">Loading Rate per Truck (items/minute):</label>
+        <input type="number" id="loadingRate" min="1" required>
+
+        <button type="button" onclick="calculateCapacity()">Calculate Capacity</button>
+    </form>
+
+    <div id="result"></div>
+
+    <script>
+        function calculateCapacity() {
+            // Get user input
+            const numTrucks = parseFloat(document.getElementById('numTrucks').value);
+            const loadingTime = parseFloat(document.getElementById('loadingTime').value);
+            const loadingRate = parseFloat(document.getElementById('loadingRate').value);
+
+            // Calculate capacity
+            const capacity = numTrucks * loadingTime * loadingRate;
+
+            // Display result
+            document.getElementById('result').innerHTML = `<p>Total Capacity: ${capacity} items</p>`;
+        }
+    </script>
+
+</body>
+</html>
