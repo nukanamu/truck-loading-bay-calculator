@@ -76,6 +76,10 @@
     </form>
 
     <form id="compartmentForm" style="display: none;">
+        <h2>Truck Information</h2>
+        <p>Total Truck Size: <span id="displayTruckSize"></span> liters</p>
+        <p>Number of Compartments: <span id="displayNumCompartments"></span></p>
+
         <h2>Enter Volume for Each Compartment</h2>
         <div id="compartmentInputs"></div>
 
@@ -94,6 +98,9 @@
                 alert('Please enter valid numerical values for truck size and number of compartments.');
                 return;
             }
+
+            document.getElementById('displayTruckSize').textContent = truckSize;
+            document.getElementById('displayNumCompartments').textContent = numCompartments;
 
             document.getElementById('truckInfoForm').style.display = 'none';
             document.getElementById('compartmentForm').style.display = 'block';
