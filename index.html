@@ -59,10 +59,6 @@
         .success {
             color: green;
         }
-
-        #compartmentInputs {
-            display: none;
-        }
     </style>
 </head>
 <body>
@@ -85,7 +81,7 @@
         <p>Number of Compartments: <span id="displayNumCompartments"></span></p>
 
         <h2>Enter Volume for Each Compartment</h2>
-        <div id="compartmentInputsContainer"></div>
+        <div id="compartmentInputs"></div>
 
         <button type="button" onclick="goBack()">Back</button>
         <button type="button" onclick="calculateAndValidate()">Calculate and Validate</button>
@@ -109,8 +105,8 @@
             document.getElementById('truckInfoForm').style.display = 'none';
             document.getElementById('compartmentForm').style.display = 'block';
 
-            const compartmentInputsContainer = document.getElementById('compartmentInputsContainer');
-            compartmentInputsContainer.innerHTML = '';
+            const compartmentInputs = document.getElementById('compartmentInputs');
+            compartmentInputs.innerHTML = '';
 
             for (let i = 1; i <= numCompartments; i++) {
                 const label = document.createElement('label');
@@ -121,8 +117,8 @@
                 input.min = '1';
                 input.required = true;
 
-                compartmentInputsContainer.appendChild(label);
-                compartmentInputsContainer.appendChild(input);
+                compartmentInputs.appendChild(label);
+                compartmentInputs.appendChild(input);
             }
         }
 
@@ -133,7 +129,7 @@
 
         function calculateAndValidate() {
             const truckSize = parseFloat(document.getElementById('truckSize').value);
-            const compartmentInputs = document.getElementById('compartmentInputsContainer').querySelectorAll('input');
+            const compartmentInputs = document.getElementById('compartmentInputs').querySelectorAll('input');
 
             let totalCompartmentVolume = 0;
 
@@ -158,3 +154,9 @@
         function displayResult(message, className) {
             const resultDiv = document.getElementById('result');
             resultDiv.textContent = message;
+            resultDiv.className = className;
+        }
+    </script>
+
+</body>
+</html>
