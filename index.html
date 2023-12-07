@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Truck Loading Bay Capacity Calculator</title>
+    <title>Oil Truck Compartment Volume Calculator</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -51,45 +51,97 @@
             margin-top: 20px;
             color: #333;
         }
+
+        .error {
+            color: red;
+        }
+
+        .success {
+            color: green;
+        }
     </style>
 </head>
 <body>
 
-    <h1>Truck Loading Bay Capacity Calculator</h1>
+    <h1>Oil Truck Compartment Volume Calculator</h1>
 
-    <form id="loadingForm">
-        <label for="numTrucks">Number of Trucks:</label>
-        <input type="number" id="numTrucks" min="1" required>
+    <form id="truckInfoForm">
+        <label for="truckSize">Truck Total Volume (in liters):</label>
+        <input type="number" id="truckSize" min="1" required>
 
-        <label for="loadingTime">Loading Time per Truck (minutes):</label>
-        <input type="number" id="loadingTime" min="1" required>
+        <label for="numCompartments">Number of Compartments:</label>
+        <input type="number" id="numCompartments" min="1" required>
 
-        <label for="loadingRate">Loading Rate per Truck (items/minute):</label>
-        <input type="number" id="loadingRate" min="1" required>
+        <button type="button" onclick="getCompartmentVolume()">Next</button>
+    </form>
 
-        <button type="button" onclick="calculateCapacity()">Calculate Capacity</button>
+    <form id="compartmentForm" style="display: none;">
+        <h2>Enter Volume for Each Compartment</h2>
+        <div id="compartmentInputs"></div>
+
+        <button type="button" onclick="calculateAndValidate()">Calculate and Validate</button>
     </form>
 
     <div id="result"></div>
 
     <script>
-        function calculateCapacity() {
-            // Get user input
-            const numTrucks = parseFloat(document.getElementById('numTrucks').value);
-            const loadingTime = parseFloat(document.getElementById('loadingTime').value);
-            const loadingRate = parseFloat(document.getElementById('loadingRate').value);
+        function getCompartmentVolume() {
+            const truckSize = parseFloat(document.getElementById('truckSize').value);
+            const numCompartments = parseInt(document.getElementById('numCompartments').value);
 
-            // Validate input
-            if (isNaN(numTrucks) || isNaN(loadingTime) || isNaN(loadingRate)) {
-                alert('Please enter valid numerical values for all fields.');
+            if (isNaN(truckSize) || isNaN(numCompartments)) {
+                alert('Please enter valid numerical values for truck size and number of compartments.');
                 return;
             }
 
-            // Calculate capacity
-            const capacity = numTrucks * loadingTime * loadingRate;
+            document.getElementById('truckInfoForm').style.display = 'none';
+            document.getElementById('compartmentForm').style.display = 'block';
 
-            // Display result
-            document.getElementById('result').innerHTML = `<p>Total Capacity: ${capacity} items</p>`;
+            const compartmentInputs = document.getElementById('compartmentInputs');
+            compartmentInputs.innerHTML = '';
+
+            for (let i = 1; i <= numCompartments; i++) {
+                const label = document.createElement('label');
+                label.textContent = `Volume of Compartment ${i} (in liters):`;
+
+                const input = document.createElement('input');
+                input.type = 'number';
+                input.min = '1';
+                input.required = true;
+
+                compartmentInputs.appendChild(label);
+                compartmentInputs.appendChild(input);
+            }
+        }
+
+        function calculateAndValidate() {
+            const truckSize = parseFloat(document.getElementById('truckSize').value);
+            const compartmentInputs = document.getElementById('compartmentInputs').querySelectorAll('input');
+
+            let totalCompartmentVolume = 0;
+
+            for (const input of compartmentInputs) {
+                const compartmentVolume = parseFloat(input.value);
+
+                if (isNaN(compartmentVolume) || compartmentVolume < 0) {
+                    alert('Please enter valid numerical values for compartment volumes.');
+                    return;
+                }
+
+                totalCompartmentVolume += compartmentVolume;
+            }
+
+            if (totalCompartmentVolume !== truckSize) {
+                displayResult('Truck size does not match compartment volume', 'error');
+            } else {
+                displayResult('Truck information OK', 'success');
+            }
+        }
+
+        function displayResult(message, className) {
+            const resultDiv = document.getElementById('result');
+            resultDiv.textContent = message;
+            resultDiv.className = className;
         }
     </script>
 
