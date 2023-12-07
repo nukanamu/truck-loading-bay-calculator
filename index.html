@@ -79,6 +79,7 @@
         <h2>Enter Volume for Each Compartment</h2>
         <div id="compartmentInputs"></div>
 
+        <button type="button" onclick="goBack()">Back</button>
         <button type="button" onclick="calculateAndValidate()">Calculate and Validate</button>
     </form>
 
@@ -112,6 +113,11 @@
                 compartmentInputs.appendChild(label);
                 compartmentInputs.appendChild(input);
             }
+        }
+
+        function goBack() {
+            document.getElementById('truckInfoForm').style.display = 'block';
+            document.getElementById('compartmentForm').style.display = 'none';
         }
 
         function calculateAndValidate() {
