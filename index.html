@@ -76,23 +76,25 @@
         <label for="numCompartments">Number of Compartments:</label>
         <input type="number" id="numCompartments" min="1" required>
 
-        <div id="compartmentInputs">
-            <h2>Truck Information</h2>
-            <p>Total Truck Size: <span id="displayTruckSize"></span> liters</p>
-            <p>Number of Compartments: <span id="displayNumCompartments"></span></p>
+        <button type="button" onclick="getCompartmentVolume()">Next</button>
+    </form>
 
-            <h2>Enter Volume for Each Compartment</h2>
-            <div id="compartmentInputsContainer"></div>
-        </div>
+    <form id="compartmentForm" style="display: none;">
+        <h2>Truck Information</h2>
+        <p>Total Truck Size: <span id="displayTruckSize"></span> liters</p>
+        <p>Number of Compartments: <span id="displayNumCompartments"></span></p>
 
-        <button type="button" onclick="calculateAndValidate()">Calculate and Validate</button>
+        <h2>Enter Volume for Each Compartment</h2>
+        <div id="compartmentInputsContainer"></div>
+
         <button type="button" onclick="goBack()">Back</button>
+        <button type="button" onclick="calculateAndValidate()">Calculate and Validate</button>
     </form>
 
     <div id="result"></div>
 
     <script>
-        function calculateAndValidate() {
+        function getCompartmentVolume() {
             const truckSize = parseFloat(document.getElementById('truckSize').value);
             const numCompartments = parseInt(document.getElementById('numCompartments').value);
 
@@ -100,6 +102,12 @@
                 alert('Please enter valid numerical values for truck size and number of compartments.');
                 return;
             }
+
+            document.getElementById('displayTruckSize').textContent = truckSize;
+            document.getElementById('displayNumCompartments').textContent = numCompartments;
+
+            document.getElementById('truckInfoForm').style.display = 'none';
+            document.getElementById('compartmentForm').style.display = 'block';
 
             const compartmentInputsContainer = document.getElementById('compartmentInputsContainer');
             compartmentInputsContainer.innerHTML = '';
@@ -116,19 +124,37 @@
                 compartmentInputsContainer.appendChild(label);
                 compartmentInputsContainer.appendChild(input);
             }
-
-            document.getElementById('displayTruckSize').textContent = truckSize;
-            document.getElementById('displayNumCompartments').textContent = numCompartments;
-
-            // Show compartment input section
-            document.getElementById('compartmentInputs').style.display = 'block';
         }
 
         function goBack() {
-            // Hide compartment input section
-            document.getElementById('compartmentInputs').style.display = 'none';
+            document.getElementById('truckInfoForm').style.display = 'block';
+            document.getElementById('compartmentForm').style.display = 'none';
         }
-    </script>
 
-</body>
-</html>
+        function calculateAndValidate() {
+            const truckSize = parseFloat(document.getElementById('truckSize').value);
+            const compartmentInputs = document.getElementById('compartmentInputsContainer').querySelectorAll('input');
+
+            let totalCompartmentVolume = 0;
+
+            for (const input of compartmentInputs) {
+                const compartmentVolume = parseFloat(input.value);
+
+                if (isNaN(compartmentVolume) || compartmentVolume < 0) {
+                    alert('Please enter valid numerical values for compartment volumes.');
+                    return;
+                }
+
+                totalCompartmentVolume += compartmentVolume;
+            }
+
+            if (totalCompartmentVolume !== truckSize) {
+                displayResult('Truck size does not match compartment volume', 'error');
+            } else {
+                displayResult('Truck information OK', 'success');
+            }
+        }
+
+        function displayResult(message, className) {
+            const resultDiv = document.getElementById('result');
+            resultDiv.textContent = message;
